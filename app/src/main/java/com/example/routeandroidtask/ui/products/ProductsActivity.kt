@@ -40,7 +40,10 @@ class ProductsActivity : AppCompatActivity() {
             }
             launch {
                 viewModel.showErrorLayout.collect {
-                    it?.let { showErrorLayout(it) }
+                    it?.let {
+                        showErrorLayout(it)
+                        showLoadingLayout(false)
+                    }
                 }
             }
             launch {

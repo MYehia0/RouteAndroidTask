@@ -38,6 +38,7 @@ class ProductsViewModel @Inject constructor(private val getProductsInteractor: G
                 _showLoadingLayout.value = false
             } catch (t: HttpException) {
                 _showErrorLayout.value = t.localizedMessage
+                _showLoadingLayout.value = false
             } catch (ex: Exception) {
                 _showLoadingLayout.value = false
                 _showErrorLayout.value = ex.localizedMessage
