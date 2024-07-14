@@ -1,18 +1,19 @@
-package com.example.routeandroidtask.ui.main
+package com.example.routeandroidtask.ui.products
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.routeandroidtask.database.model.Product
-import com.example.routeandroidtask.repositoriesContract.ProductsRepository
+import com.example.routeandroidtask.data.datasources.response.Product
+import com.example.routeandroidtask.domain.GetProductsInteractor
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(private val productsRepository: ProductsRepository) : ViewModel() {
+class ProductsViewModel @Inject constructor(private val getProductsInteractor: GetProductsInteractor) : ViewModel() {
     private val _showLoadingLayout = MutableLiveData<Boolean>()
     val showLoadingLayout: LiveData<Boolean>
         get() = _showLoadingLayout
@@ -30,10 +31,10 @@ class MainViewModel @Inject constructor(private val productsRepository: Products
     }
 
     fun loadProducts(){
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             _showLoadingLayout.postValue(true)
             try {
-                val response = productsRepository.getProducts()!!
+                val response = getProductsInteractor()!!
                 _productsList.postValue(response)
                 _showLoadingLayout.postValue(false)
             } catch (t: HttpException) {

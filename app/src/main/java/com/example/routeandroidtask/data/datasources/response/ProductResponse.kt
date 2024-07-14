@@ -1,4 +1,4 @@
-package com.example.routeandroidtask.database.model
+package com.example.routeandroidtask.data.datasources.response
 
 import com.google.gson.annotations.SerializedName
 

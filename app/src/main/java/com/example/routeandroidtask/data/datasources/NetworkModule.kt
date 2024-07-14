@@ -1,4 +1,4 @@
-package com.example.routeandroidtask.database
+package com.example.routeandroidtask.data.datasources
 
 import android.util.Log
 import dagger.Module

@@ -6,7 +6,7 @@
     <data>
         <variable
             name="product"
-            type="com.example.routeandroidtask.database.model.Product" />
+            type="com.example.routeandroidtask.data.datasources.response.Product" />
     </data>
     
     <androidx.cardview.widget.CardView

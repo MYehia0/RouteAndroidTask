@@ -1,12 +1,11 @@
-package com.example.routeandroidtask.ui.main
+package com.example.routeandroidtask.ui.products
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import com.example.routeandroidtask.database.model.Product
+import com.example.routeandroidtask.data.datasources.response.Product
 import com.example.routeandroidtask.databinding.ItemProductBinding
-import javax.inject.Inject
 
 class ProductAdapter (private var items: List<Product?>?) : Adapter<ProductAdapter.ProductHolder>() {
 
