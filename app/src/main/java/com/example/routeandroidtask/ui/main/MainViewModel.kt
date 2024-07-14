@@ -4,12 +4,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.routeandroidtask.database.ApiManager
 import com.example.routeandroidtask.database.model.Product
+import com.example.routeandroidtask.repositoriesContract.ProductsRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
+import javax.inject.Inject
 
-class MainViewModel : ViewModel() {
+@HiltViewModel
+class MainViewModel @Inject constructor(private val productsRepository: ProductsRepository) : ViewModel() {
     private val _showLoadingLayout = MutableLiveData<Boolean>()
     val showLoadingLayout: LiveData<Boolean>
         get() = _showLoadingLayout
@@ -30,7 +33,7 @@ class MainViewModel : ViewModel() {
         viewModelScope.launch {
             _showLoadingLayout.postValue(true)
             try {
-                val response = ApiManager.getApis().getProducts().products!!
+                val response = productsRepository.getProducts()!!
                 _productsList.postValue(response)
                 _showLoadingLayout.postValue(false)
             } catch (t: HttpException) {

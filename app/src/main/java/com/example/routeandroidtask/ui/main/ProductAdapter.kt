@@ -6,8 +6,9 @@ import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.routeandroidtask.database.model.Product
 import com.example.routeandroidtask.databinding.ItemProductBinding
+import javax.inject.Inject
 
-class ProductAdapter(private var items: List<Product?>?) : Adapter<ProductAdapter.ProductHolder>() {
+class ProductAdapter (private var items: List<Product?>?) : Adapter<ProductAdapter.ProductHolder>() {
 
     private lateinit var binding: ItemProductBinding
 
