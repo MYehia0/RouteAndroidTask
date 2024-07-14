@@ -5,9 +5,11 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.lifecycleScope
 import com.example.routeandroidtask.R
 import com.example.routeandroidtask.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ProductsActivity : AppCompatActivity() {
@@ -23,21 +25,29 @@ class ProductsActivity : AppCompatActivity() {
         binding.content.tryAgain.setOnClickListener {
             viewModel.loadProducts()
         }
-        subscribeToLiveData()
+        handleScreenState()
     }
 
-    private fun subscribeToLiveData() {
-        viewModel.showLoadingLayout.observe(this) {
-            showLoadingLayout(it)
-            if (it) {
-                hideErrorLayout()
+    private fun handleScreenState() {
+        lifecycleScope.launch {
+            launch {
+                viewModel.showLoadingLayout.collect{
+                    showLoadingLayout(it)
+                    if (it) {
+                        hideErrorLayout()
+                    }
+                }
             }
-        }
-        viewModel.showErrorLayout.observe(this) {
-            showErrorLayout(it)
-        }
-        viewModel.productsList.observe(this) {
-            adapter.changeData(it)
+            launch {
+                viewModel.showErrorLayout.collect {
+                    it?.let { showErrorLayout(it) }
+                }
+            }
+            launch {
+                viewModel.productsList.collect {
+                    it?.let { adapter.changeData(it) }
+                }
+            }
         }
     }
 
