@@ -1,19 +1,13 @@
 package com.example.routeandroidtask.ui.main
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.routeandroidtask.database.ApiManager
 import com.example.routeandroidtask.database.model.Product
-import com.example.routeandroidtask.database.model.ProductsResponse
-import com.google.gson.Gson
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
 import retrofit2.HttpException
-import retrofit2.Response
 
 class MainViewModel : ViewModel() {
     private val _showLoadingLayout = MutableLiveData<Boolean>()
@@ -33,22 +27,18 @@ class MainViewModel : ViewModel() {
     }
 
     fun loadProducts(){
-        _showLoadingLayout.value = true
-        ApiManager.getApis().getProducts().enqueue(object :Callback<ProductsResponse>{
-            override fun onResponse(call: Call<ProductsResponse>, response: Response<ProductsResponse>) {
-                _showLoadingLayout.value = false
-                if (response.isSuccessful) {
-                    _productsList.value = response.body()?.products!!
-                }
-                else {
-                    _showErrorLayout.value = "Response is not successful"
-                }
+        viewModelScope.launch {
+            _showLoadingLayout.postValue(true)
+            try {
+                val response = ApiManager.getApis().getProducts().products!!
+                _productsList.postValue(response)
+                _showLoadingLayout.postValue(false)
+            } catch (t: HttpException) {
+                _showErrorLayout.postValue(t.localizedMessage)
+            } catch (ex: Exception) {
+                _showLoadingLayout.postValue(false)
+                _showErrorLayout.postValue(ex.localizedMessage)
             }
-
-            override fun onFailure(call: Call<ProductsResponse>, t: Throwable) {
-                _showLoadingLayout.value = false
-                _showErrorLayout.value = t.localizedMessage
-            }
-        })
+        }
     }
 }

@@ -6,12 +6,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import com.example.routeandroidtask.R
-import com.example.routeandroidtask.database.model.Product
 import com.example.routeandroidtask.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
-    lateinit var adapter: ProductAdapter
-    lateinit var binding: ActivityMainBinding
+    private lateinit var adapter: ProductAdapter
+    private lateinit var binding: ActivityMainBinding
     private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,7 +22,6 @@ class MainActivity : AppCompatActivity() {
             viewModel.loadProducts()
         }
         subscribeToLiveData()
-//        viewModel.loadProducts()
     }
 
     private fun subscribeToLiveData() {
